@@ -32,7 +32,7 @@ def main() :
         sample = pd.read_csv(z.open('X_test_final.csv', index_col='SK_ID_CURR', encoding ='utf-8')
         
         
-        description = pd.read_csv("features_description.csv", usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
+        #description = pd.read_csv("features_description.csv", usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
                                   
 
                    
