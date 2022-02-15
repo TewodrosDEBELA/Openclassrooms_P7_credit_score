@@ -59,4 +59,4 @@ def credit(id_client):
         
     
 if __name__ == '__main__':
-    app.run(debug=False)# debug=True
+    app.run(debug=True)# debug=True
