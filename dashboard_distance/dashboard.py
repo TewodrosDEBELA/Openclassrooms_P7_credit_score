@@ -226,7 +226,7 @@ def main() :
     
     #Appel de l'API : 
     
-    #API_url = "http://127.0.0.1:5000/credit/" + str(chk_id)# Local
+    API_url = "http://127.0.0.1:5000/credit/" + str(chk_id)# Local
     
   
     with st.spinner('Chargement du score du client...'):
