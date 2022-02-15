@@ -1,40 +1,3 @@
-import streamlit as st
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pickle
-import shap
-from urllib.request import urlopen
-import json
-import os
-import plotly.express as px
-from zipfile import ZipFile
-from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import train_test_split
-from sklearn.cluster import KMeans
-plt.style.use('fivethirtyeight')
-sns.set_style('darkgrid')
-
-
-def main() :
-
-    @st.cache
-    def load_data():
-        z = ZipFile("data/data_default_risk.zip")
-        data = pd.read_csv(z.open('default_risk.csv'), index_col='SK_ID_CURR', encoding ='utf-8')
-
-        z = ZipFile("data/X_sample_30.zip")
-        sample = pd.read_csv(z.open('X_sample.csv'), index_col='SK_ID_CURR', encoding ='utf-8')
-        
-        description = pd.read_csv("data/features_description.csv", 
-                                  usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
-
-        target = data.iloc[:, -1:]
-
-        return data, sample, target, description
-
-
    # -*- coding: utf-8 -*-
 """
 Created on Mon Feb 14 13:54:50 2022
@@ -72,12 +35,30 @@ def main() :
 
     @st.cache
     def load_data():
-        path="C:/Users/Tewod/OneDrive/Bureau/Openclassrooms/projets/projet7/OpenClassrooms-Project7/"
-        data = pd.read_csv(path+'data/application_train.csv',index_col='SK_ID_CURR', encoding ='utf-8')
+        z = ZipFile("data/data_default_risk.zip")
+        data = pd.read_csv(z.open('default_risk.csv'), index_col='SK_ID_CURR', encoding ='utf-8')
 
-        sample = pd.read_csv(path+'data/X_test_final.csv', index_col='SK_ID_CURR', encoding ='utf-8')
+        z = ZipFile("data/X_sample_30.zip")
+        sample = pd.read_csv(z.open('X_sample.csv'), index_col='SK_ID_CURR', encoding ='utf-8')
         
-        description = pd.read_csv(path+"data/features_description.csv",  usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
+        description = pd.read_csv("data/features_description.csv", 
+                                  usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
+
+        target = data.iloc[:, -1:]
+
+        return data, sample, target, description
+
+
+def main() :
+
+    @st.cache
+    def load_data():
+        z = ZipFile("application_train.zip")
+        data = pd.read_csv(z.open('application_train.csv'),index_col='SK_ID_CURR', encoding ='utf-8')
+        z = ZipFile("X_test_final.zip")
+        sample = pd.read_csv(z.open('X_test_final.csv', index_col='SK_ID_CURR', encoding ='utf-8')
+        
+        description = pd.read_csv("features_description.csv",  usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
 
         target = data.iloc[:, 0]
 
@@ -297,8 +278,9 @@ def main() :
 
     
     #Feature importance / description
-    path="C:/Users/Tewod/OneDrive/Bureau/Openclassrooms/projets/projet7/OpenClassrooms-Project7/"
-    X_train=pd.read_csv(path+'data/X_train.csv',index_col='SK_ID_CURR', encoding ='utf-8')
+    z=ZipFile("X_train.zip")
+    X_train=pd.read_csv(z.open('X_train.csv'),index_col='SK_ID_CURR', encoding ='utf-8')
+    z=ZipFile("y_train_final.zip")                        
     y_train=pd.read_csv(path+'data/y_train_final.csv', encoding ='utf-8')
     #if st.checkbox("Customer ID {:.0f} feature importance ?".format(chk_id)):
     st.subheader('__*Actionable:*__ Generate LIME explainer')
