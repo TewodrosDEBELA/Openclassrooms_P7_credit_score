@@ -41,7 +41,7 @@ def main() :
         
         #description = pd.read_csv("features_description.csv",  usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
 
-        target = data.iloc[:, 0]
+        target = data.iloc[:,:1]
 
         return data, sample, target, description
 
