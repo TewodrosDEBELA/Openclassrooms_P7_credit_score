@@ -33,7 +33,7 @@ def home():
     return jsonify(username='eduCBA' , account='Premium' , validity='200 days')
     
 
-#@app.route('/credit/', methods=['GET'])
+@app.route('/credit/', methods=['GET'])
 
 @app.route('/credit/<int:id_client>' , methods=['GET'])
 
