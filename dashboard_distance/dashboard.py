@@ -35,12 +35,60 @@ def main() :
         return data, sample, target, description
 
 
+   # -*- coding: utf-8 -*-
+"""
+Created on Mon Feb 14 13:54:50 2022
+
+@author: Tewodros Cherenet DEBELA
+"""
+
+
+
+import streamlit as st
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import shap
+from urllib.request import urlopen
+import json
+import os
+import lime
+import lime.lime_tabular
+import plotly.express as px
+from zipfile import ZipFile
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.model_selection import train_test_split
+from sklearn.cluster import KMeans
+from joblib import load
+from lightgbm import LGBMClassifier
+import streamlit.components.v1 as components
+plt.style.use('fivethirtyeight')
+sns.set_style('darkgrid')
+
+
+
+def main() :
+
+    @st.cache
+    def load_data():
+        path="C:/Users/Tewod/OneDrive/Bureau/Openclassrooms/projets/projet7/OpenClassrooms-Project7/"
+        data = pd.read_csv(path+'data/application_train.csv',index_col='SK_ID_CURR', encoding ='utf-8')
+
+        sample = pd.read_csv(path+'data/X_test_final.csv', index_col='SK_ID_CURR', encoding ='utf-8')
+        
+        description = pd.read_csv(path+"data/features_description.csv",  usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
+
+        target = data.iloc[:, 0]
+
+        return data, sample, target, description
+
+
     def load_model():
         '''loading the trained model'''
-        pickle_in = open('model/lgbm_classifier.pickle', 'rb') 
-        clf = pickle.load(pickle_in)
+        path="C:/Users/Tewod/OneDrive/Bureau/Openclassrooms/projets/projet7/OpenClassrooms-Project7/"
+        clf = load(path+'model/lgbm_classifier.pickle')
        
-
         return clf
 
 
@@ -71,7 +119,7 @@ def main() :
 
     @st.cache
     def load_age_population(data):
-        data_age = round((data["DAYS_BIRTH"]/365), 2)
+        data_age = round((data["DAYS_BIRTH"]/-365), 2)
         return data_age
 
     @st.cache
@@ -165,7 +213,7 @@ def main() :
 
         infos_client = identite_client(data, chk_id)
         st.write("**Gender : **", infos_client["CODE_GENDER"].values[0])
-        st.write("**Age : **{:.0f} ans".format(int(infos_client["DAYS_BIRTH"]/365)))
+        st.write("**Age : **{:.0f} ans".format(int(infos_client["DAYS_BIRTH"]/-365)))
         st.write("**Family status : **", infos_client["NAME_FAMILY_STATUS"].values[0])
         st.write("**Number of children : **{:.0f}".format(infos_client["CNT_CHILDREN"].values[0]))
 
@@ -173,7 +221,7 @@ def main() :
         data_age = load_age_population(data)
         fig, ax = plt.subplots(figsize=(10, 5))
         sns.histplot(data_age, edgecolor = 'k', color="goldenrod", bins=20)
-        ax.axvline(int(infos_client["DAYS_BIRTH"].values / 365), color="green", linestyle='--')
+        ax.axvline(int(infos_client["DAYS_BIRTH"].values /-365), color="green", linestyle='--')
         ax.set(title='Customer age', xlabel='Age(Year)', ylabel='')
         st.pyplot(fig)
     
@@ -194,7 +242,7 @@ def main() :
         
         #Relationship Age / Income Total interactive plot 
         data_sk = data.reset_index(drop=False)
-        data_sk.DAYS_BIRTH = (data_sk['DAYS_BIRTH']/365).round(1)
+        data_sk.DAYS_BIRTH = (data_sk['DAYS_BIRTH']/-365).round(1)
         fig, ax = plt.subplots(figsize=(10, 10))
         fig = px.scatter(data_sk, x='DAYS_BIRTH', y="AMT_INCOME_TOTAL", 
                          size="AMT_INCOME_TOTAL", color='CODE_GENDER',
@@ -221,9 +269,10 @@ def main() :
     
     
     #Appel de l'API : 
-    #API_url = "http://127.0.0.1:5000/credit/" + str(chk_id) local
-    API_url = "https://api-prediction-credit.herokuapp.com/credit/" + str(chk_id)
-
+    
+    API_url = "http://127.0.0.1:5000/credit/" + str(chk_id) 
+    
+  
     with st.spinner('Chargement du score du client...'):
         json_url = urlopen(API_url)
 
@@ -248,36 +297,54 @@ def main() :
 
     
     #Feature importance / description
-    if st.checkbox("Customer ID {:.0f} feature importance ?".format(chk_id)):
-        shap.initjs()
-        X = sample.iloc[:, :-1]
-        X = X[X.index == chk_id]
-        number = st.slider("Pick a number of features…", 0, 20, 5)
+    path="C:/Users/Tewod/OneDrive/Bureau/Openclassrooms/projets/projet7/OpenClassrooms-Project7/"
+    X_train=pd.read_csv(path+'data/X_train.csv',index_col='SK_ID_CURR', encoding ='utf-8')
+    y_train=pd.read_csv(path+'data/y_train_final.csv', encoding ='utf-8')
+    #if st.checkbox("Customer ID {:.0f} feature importance ?".format(chk_id)):
+    st.subheader('__*Actionable:*__ Generate LIME explainer')
+    
+     
+    if st.checkbox("Customer ID {:.0f} lime value ?".format(chk_id)):
+            
+            X = sample
+            X = X[X.index == chk_id]
+            X.reset_index().drop('SK_ID_CURR', axis=1)
+            lime_explainer = lime.lime_tabular.LimeTabularExplainer(
+                             X_train.values,
+                             training_labels=y_train.values,
+                             feature_names=X_train.columns.tolist(),
+                             feature_selection="auto",
+                             class_names=["<0.5", ">0.5"],
+                             discretize_continuous=True, discretizer="entropy",
+                             #X.to_numpy(),
+                             mode="classification", 
+                            verbose=True)
 
-        fig, ax = plt.subplots(figsize=(10, 10))
-        explainer = shap.TreeExplainer(load_model())
-        shap_values = explainer.shap_values(X)
-        shap.summary_plot(shap_values[0], X, plot_type ="bar", max_display=number, color_bar=False, plot_size=(5, 5))
-        st.pyplot(fig)
-        
-        if st.checkbox("Need help about feature description ?") :
+            exp = lime_explainer.explain_instance(data_row=X.iloc[0], predict_fn=load_model().predict_proba)
+
+            html = exp.as_html()
+
+            components.html(html, height=700)#, height=1000, width=1000
+    else:
+
+        st.markdown("<i>…</i>", unsafe_allow_html=True)
+    
+    if st.checkbox("Need help about feature description ?") :
             list_features = description.index.to_list()
             feature = st.selectbox('Feature checklist…', list_features)
             st.table(description.loc[description.index == feature][:1])
-        
-    else:
-        st.markdown("<i>…</i>", unsafe_allow_html=True)
-            
     
+    else:
 
-    #Similar customer files display
+        st.markdown("<i>…</i>", unsafe_allow_html=True)
+
+     #Similar customer files display
     chk_voisins = st.checkbox("Show similar customer files ?")
-
     if chk_voisins:
-        knn = load_knn(sample)
-        st.markdown("<u>List of the 10 files closest to this Customer :</u>", unsafe_allow_html=True)
-        st.dataframe(load_kmeans(sample, chk_id, knn))
-        st.markdown("<i>Target 1 = Customer with default</i>", unsafe_allow_html=True)
+      knn = load_knn(sample)
+      st.markdown("<u>List of the 10 files closest to this Customer :</u>", unsafe_allow_html=True)
+      st.dataframe(load_kmeans(sample, chk_id, knn))
+      st.markdown("<i>Target 1 = Customer with default</i>", unsafe_allow_html=True)
     else:
         st.markdown("<i>…</i>", unsafe_allow_html=True)
         
