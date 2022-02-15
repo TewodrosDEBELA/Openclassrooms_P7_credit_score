@@ -249,7 +249,7 @@ def main() :
     z=ZipFile("X_train.zip")
     X_train=pd.read_csv(z.open('X_train.csv'),index_col='SK_ID_CURR', encoding ='utf-8')
     z=ZipFile("y_train_final.zip")                        
-    y_train=pd.read_csv(z.open('y_train_final.csv', encoding ='utf-8')
+    y_train=pd.read_csv(z.open('y_train_final.csv', encoding ='utf-8'))
     #if st.checkbox("Customer ID {:.0f} feature importance ?".format(chk_id)):
     st.subheader('__*Actionable:*__ Generate LIME explainer')
     
