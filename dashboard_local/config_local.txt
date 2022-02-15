@@ -1,0 +1,12 @@
+
+
+Pour pourvoir utliser l'API RESET dans notre dashboard il faut suivre les étapes suivantes:
+
+1: Cmd Terminal 1 pour lancer l'API: 
+python api/api.py
+
+Pour lancer une prédiction sur votre navigateur : 
+http://127.0.0.1:5000/credit/idclient
+
+2 Cmd terminal 2 pour lancer le dashboard :
+streamlit run dashboard_local/dasboard.py 
