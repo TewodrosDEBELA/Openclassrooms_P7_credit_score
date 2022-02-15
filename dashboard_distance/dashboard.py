@@ -49,8 +49,7 @@ def main() :
 
     def load_model():
         '''loading the trained model'''
-        path="C:/Users/Tewod/OneDrive/Bureau/Openclassrooms/projets/projet7/OpenClassrooms-Project7/"
-        clf = load(path+'model/lgbm_classifier.pickle')
+        clf = load('model/lgbm_classifier.pickle')
        
         return clf
 
@@ -233,7 +232,7 @@ def main() :
     
     #Appel de l'API : 
     
-    API_url = "http://127.0.0.1:5000/credit/" + str(chk_id) 
+    #API_url = "http://127.0.0.1:5000/credit/" + str(chk_id)# Local
     
   
     with st.spinner('Chargement du score du client...'):
@@ -263,7 +262,7 @@ def main() :
     z=ZipFile("X_train.zip")
     X_train=pd.read_csv(z.open('X_train.csv'),index_col='SK_ID_CURR', encoding ='utf-8')
     z=ZipFile("y_train_final.zip")                        
-    y_train=pd.read_csv(path+'data/y_train_final.csv', encoding ='utf-8')
+    y_train=pd.read_csv(z.open('y_train_final.csv', encoding ='utf-8')
     #if st.checkbox("Customer ID {:.0f} feature importance ?".format(chk_id)):
     st.subheader('__*Actionable:*__ Generate LIME explainer')
     
