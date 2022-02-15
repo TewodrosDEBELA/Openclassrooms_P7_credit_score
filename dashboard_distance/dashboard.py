@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -30,14 +29,8 @@ def main() :
         data = pd.read_csv(z.open('application_train.csv'),index_col='SK_ID_CURR', encoding ='utf-8')
         z = ZipFile("X_test_final.zip")
         sample = pd.read_csv(z.open('X_test_final.csv', index_col='SK_ID_CURR', encoding ='utf-8')
-        
-        
-        #description = pd.read_csv("features_description.csv", usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
-                                  
-
-                   
-        target=data.iloc[:,0]
-
+        description = pd.read_csv("features_description.csv", usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')             
+        target = data.iloc[:,0]
         return data, sample, target, description
 
 
