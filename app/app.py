@@ -7,6 +7,8 @@ from zipfile import ZipFile
 import json
 from lightgbm import LGBMClassifier
 
+API_url = "http://127.0.0.1:5000/credit/" + str(chk_id)
+
 app = Flask(__name__)
 
 
