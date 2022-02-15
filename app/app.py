@@ -7,10 +7,10 @@ from zipfile import ZipFile
 import json
 from lightgbm import LGBMClassifier
 
-API_url = "http://127.0.0.1:5000/credit/" 
 
 app = Flask(__name__)
 
+API_url = "http://127.0.0.1:5000/credit/" 
 
 # tell Flask to use the above defined config
 
