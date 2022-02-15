@@ -91,7 +91,7 @@ def main() :
 
     @st.cache
     def load_prediction(sample, id, clf):
-        X=sample.iloc[:, :126]
+        X=sample#.iloc[:, :126]
         score = clf.predict_proba(X[X.index == int(id)])[:,1]
         return score
 
