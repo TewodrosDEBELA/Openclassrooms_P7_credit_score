@@ -19,13 +19,6 @@ z = ZipFile("X_test_final.zip")
 sample = pd.read_csv(z.open('X_test_final.csv'), index_col='SK_ID_CURR', encoding ='utf-8')
 
 X=sample.copy()
- 
-362145	
-350807
-141967
-362998
-217238
-
 
 clf.predict_proba(X.loc[[362145]])[:,1]
 
