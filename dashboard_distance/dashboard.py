@@ -35,24 +35,6 @@ def main() :
 
     @st.cache
     def load_data():
-        z = ZipFile("data/data_default_risk.zip")
-        data = pd.read_csv(z.open('default_risk.csv'), index_col='SK_ID_CURR', encoding ='utf-8')
-
-        z = ZipFile("data/X_sample_30.zip")
-        sample = pd.read_csv(z.open('X_sample.csv'), index_col='SK_ID_CURR', encoding ='utf-8')
-        
-        description = pd.read_csv("data/features_description.csv", 
-                                  usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
-
-        target = data.iloc[:, -1:]
-
-        return data, sample, target, description
-
-
-def main() :
-
-    @st.cache
-    def load_data():
         z = ZipFile("application_train.zip")
         data = pd.read_csv(z.open('application_train.csv'),index_col='SK_ID_CURR', encoding ='utf-8')
         z = ZipFile("X_test_final.zip")
