@@ -1,11 +1,3 @@
-   # -*- coding: utf-8 -*-
-"""
-Created on Mon Feb 14 13:54:50 2022
-
-@author: Tewodros Cherenet DEBELA
-"""
-
-
 
 import streamlit as st
 import pandas as pd
@@ -39,9 +31,11 @@ def main() :
         z = ZipFile("X_test_final.zip")
         sample = pd.read_csv(z.open('X_test_final.csv', index_col='SK_ID_CURR', encoding ='utf-8')
         
-        description=pd.read_csv("features_description.csv",  
-                                usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
+        
+        description = pd.read_csv("features_description.csv", 
+                                  usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')
 
+                   
         target=data.iloc[:,:1]
 
         return data, sample, target, description
