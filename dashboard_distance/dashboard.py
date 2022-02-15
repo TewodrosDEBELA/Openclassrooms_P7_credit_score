@@ -36,7 +36,7 @@ def main() :
                                   
 
                    
-        target=data.iloc[:,:0]
+        target=data.iloc[:,0]
 
         return data, sample, target, description
 
