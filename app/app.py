@@ -50,7 +50,7 @@ def credit(id_client):
         
         return jsonify(output)
     
-API_url = "http://127.0.0.1:5000/credit/" + '<int:id_client>'     
+#API_url = "http://127.0.0.1:5000/credit/" + '<int:id_client>'     
     
 if __name__ == '__main__':
-   app.run(debug=False)
+   app.run(debug=True)
