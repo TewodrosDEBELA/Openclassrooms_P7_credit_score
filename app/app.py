@@ -10,7 +10,7 @@ from lightgbm import LGBMClassifier
 
 app = Flask(__name__)
 
-API_url = "http://127.0.0.1:5000/credit/" 
+#API_url = "http://127.0.0.1:5000/credit/" 
 
 # tell Flask to use the above defined config
 
@@ -52,4 +52,4 @@ def credit(id_client):
         
     
 if __name__ == '__main__':
-    Flask.run(debug=True)# debug=True
+   create_app().run(host='0.0.0.0', port=5000, debug=True)
