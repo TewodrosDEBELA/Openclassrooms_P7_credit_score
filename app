@@ -3,6 +3,7 @@
 Created on Fri Feb 18 23:41:36 2022
 @author: Tewodros
 """
+
 import numpy as np
 from flask import Flask, request, jsonify, render_template
 import pickle
