@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import shap
 from urllib.request import urlopen
 import json
 import lime
@@ -32,11 +31,12 @@ def main() :
         target = data.iloc[:,0]
         return data, sample, target, description
 
-
-    def load_model():
+def load_model():
         '''loading the trained model'''
-        clf = pickle.load(open('model/lgbm_classifier.pickle', 'rb'))
-       
+        pickle_in = open('lgbm_classifier.pickle', 'rb') 
+
+        clf = pickle.load(pickle_in)
+               
         return clf
 
 
@@ -219,7 +219,7 @@ def main() :
     #Appel de l'API : 
     
     #API_url = "http://127.0.0.1:5000/credit/" + str(chk_id)# Local
-    API_url = "https://flask-app-credit-score.herokuapp.com/" + str(chk_id)
+    API_url = "https://flask-app-credit-score.herokuapp.com/credit/" + str(chk_id)
   
     with st.spinner('Chargement du score du client...'):
         json_url = urlopen(API_url)
