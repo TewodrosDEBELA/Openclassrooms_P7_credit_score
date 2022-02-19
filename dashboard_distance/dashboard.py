@@ -27,8 +27,7 @@ def main() :
     def load_data():
         z = ZipFile("application_train.zip")
         data = pd.read_csv(z.open('application_train.csv'),index_col='SK_ID_CURR', encoding ='utf-8')
-        z = ZipFile("X_test_final.zip")
-        sample = pd.read_csv(z.open('X_test_final.csv'), index_col='SK_ID_CURR', encoding ='utf-8')
+        sample = pd.read_csv('X_test_sample.csv', index_col='SK_ID_CURR', encoding ='utf-8')
         description = pd.read_csv("features_description.csv", usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')             
         target = data.iloc[:,0]
         return data, sample, target, description
@@ -36,7 +35,7 @@ def main() :
 
     def load_model():
         '''loading the trained model'''
-        clf = load('model/lgbm_classifier.pickle')
+        clf = pickle.load(open('model/lgbm_classifier.pickle', 'rb'))
        
         return clf
 
@@ -79,7 +78,7 @@ def main() :
 
     @st.cache
     def load_prediction(sample, id, clf):
-        X=sample#.iloc[:, :126]
+        X=sample.copy()
         score = clf.predict_proba(X[X.index == int(id)])[:,1]
         return score
 
@@ -232,7 +231,7 @@ def main() :
     
 
 
-    #Compute decision according to the best threshold 50% (it's just a guess)
+    #Compute decision according to the best threshold 50% 
     if prediction <= 50.0 :
         decision = "<font color='green'>**LOAN GRANTED**</font>" 
     else:
@@ -256,7 +255,7 @@ def main() :
      
     if st.checkbox("Customer ID {:.0f} lime value ?".format(chk_id)):
             
-            X = sample
+            X = sample.copy()
             X = X[X.index == chk_id]
             X.reset_index().drop('SK_ID_CURR', axis=1)
             lime_explainer = lime.lime_tabular.LimeTabularExplainer(
@@ -300,7 +299,7 @@ def main() :
         
         
     st.markdown('***')
-    st.markdown("Thanks for going through this Web App with me! I'd love feedback on this, so if you want to reach out you can find Code from [Github](https://github.com/DeepScienceData/Projet-OpenClassRoms)* ❤️")
+    st.markdown("Thanks for going through this Web App with me")
 
 
 if __name__ == '__main__':
