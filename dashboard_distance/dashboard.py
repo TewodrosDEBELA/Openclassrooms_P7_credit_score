@@ -26,7 +26,7 @@ def main() :
     @st.cache
     def load_data():
        
-        data = pd.read_csv('application_train.csv'),index_col='SK_ID_CURR', encoding ='utf-8')
+        data = pd.read_csv('application_train.csv',index_col='SK_ID_CURR', encoding ='utf-8')
         sample = pd.read_csv('X_test_Final.csv', index_col='SK_ID_CURR', encoding ='utf-8')
         description = pd.read_csv("features_description.csv", usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')             
         target = data.iloc[:,0]
