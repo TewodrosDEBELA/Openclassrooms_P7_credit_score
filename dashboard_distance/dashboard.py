@@ -25,9 +25,9 @@ def main() :
 
     @st.cache
     def load_data():
-        z = ZipFile("application_train.zip")
-        data = pd.read_csv(z.open('application_train.csv'),index_col='SK_ID_CURR', encoding ='utf-8')
-        sample = pd.read_csv('X_test_sample.csv', index_col='SK_ID_CURR', encoding ='utf-8')
+       
+        data = pd.read_csv('application_train.csv'),index_col='SK_ID_CURR', encoding ='utf-8')
+        sample = pd.read_csv('X_test_Final.csv', index_col='SK_ID_CURR', encoding ='utf-8')
         description = pd.read_csv("features_description.csv", usecols=['Row', 'Description'], index_col=0, encoding= 'unicode_escape')             
         target = data.iloc[:,0]
         return data, sample, target, description
@@ -244,10 +244,10 @@ def main() :
 
     
     #Feature importance / description
-    z=ZipFile("X_train.zip")
-    X_train=pd.read_csv(z.open('X_train.csv'),index_col='SK_ID_CURR', encoding ='utf-8')
-    z=ZipFile("y_train_final.zip")                        
-    y_train=pd.read_csv(z.open('y_train_final.csv'), encoding ='utf-8')
+  
+    X_train=pd.read_csv('X_train_Final.csv',index_col='SK_ID_CURR', encoding ='utf-8')
+                        
+    y_train=pd.read_csv('y_train.csv', encoding ='utf-8')
     #if st.checkbox("Customer ID {:.0f} feature importance ?".format(chk_id)):
     st.subheader('__*Actionable:*__ Generate LIME explainer')
     
@@ -298,7 +298,7 @@ def main() :
         
         
     st.markdown('***')
-    st.markdown("Thanks for going through this Web App with me")
+    st.markdown("Thank you")
 
 
 if __name__ == '__main__':
