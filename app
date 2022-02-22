@@ -31,7 +31,7 @@ def credit(id_client):
         pickle_in = open('lgbm_classifier.pickle', 'rb') 
 
         clf = pickle.load(pickle_in)
-        sample = pd.read_csv('X_test_sample.csv', index_col='SK_ID_CURR', encoding ='utf-8')
+        sample = pd.read_csv('X_test_Final.csv', index_col='SK_ID_CURR', encoding ='utf-8')
          # Testing with one client id
        
         id = id_client
