@@ -298,7 +298,7 @@ def main() :
         
         
     st.markdown('***')
-    st.markdown("Thank you")
+    st.markdown("Tewodros Cherenet DEBELA-Thank you")
 
 
 if __name__ == '__main__':
