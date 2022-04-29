@@ -19,7 +19,8 @@ import streamlit.components.v1 as components
 plt.style.use('fivethirtyeight')
 sns.set_style('darkgrid')
 
-
+#address de Dashboard
+# https://share.streamlit.io/tewodrosdebela/openclassrooms_p7_credit_score/main/dashboard_distance/dashboard.py
 
 def main() :
 
